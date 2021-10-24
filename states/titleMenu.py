@@ -1,4 +1,5 @@
-from states.song_trivia import Song_Game
+from lyricsgenius.types.song import Song
+from states.loading import Loading
 from states.state import State
 from states.cat_sprite import Cat
 import pygame,os
@@ -18,7 +19,8 @@ class Title(State):
             new_state.enter_state()
 
         if actions["play"]:
-            new_state = Song_Game(self.game)
+
+            new_state = Loading(self.game)
             new_state.enter_state()
 
         self.cat.update(actions)

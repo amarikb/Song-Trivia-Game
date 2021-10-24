@@ -34,10 +34,6 @@ class Info(State):
         
 
     def load_text_box(self):
-         #self.text = "hello"
-         #self.text_box = pygame_gui.elements.UITextBox(self.text,
-                             # pygame.Rect(self.game.GAME_W/2 + 20, self.game.GAME_H/2 - 30, 400, 400),
-                            # manager=self.game.manager)
        
          self.text_box = pygame_gui.elements.UITextBox('<font size=5 font color=#331900>♫<b>Welcome to the Song Trivia Game!♫</b></font><br>'
                              '<font size=4><b><br>           Objective of the game:</b><br>'
@@ -46,16 +42,15 @@ class Info(State):
                              '<br>                                                    *You have have three tries to guess the song name <br><br>'
                              '<br><br>' 
                              '                                               *If you guess wrong, the game will end.<br>'
-                             '                                          *Every game, you can earn points by getting the correct song name and advance to the next song.'
+                             '                                               *Every game, you can earn points by getting the correct song name and advance to the next song.'
                              '<br><br>' 
                              '<font size=5 font color=#331900>'
                              ' '
                              '  '
-                             '   '
-                             '    '
-                             '♫♪Good Luck!♫♪'
-                              '</font></font>',
-                              pygame.Rect(self.game.GAME_W/2 + 20, self.game.GAME_H/2 - 30, 410, 328),
+                             '      '
+                             '♫♪Good Luck!♫♪<br><br>'
+                              '</font><font><b>                                          **Warning:</b> There is a delay starting the game as the lyrics take time to load from api. Also some songs may not have lyrics so the game/next level will not start.</font>',
+                              pygame.Rect(self.game.GAME_W/2 + 20, self.game.GAME_H/2 - 30, 450, 360),
                              manager=self.game.manager)
             
         

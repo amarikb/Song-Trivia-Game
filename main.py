@@ -28,6 +28,7 @@ class Game():
             self.running, self.playing = True, True
             self.actions = {"play": False, "info" : False, "title" : False, "start" : False}
             self.state_stack = []
+            self.songs_done = list()
             self.time_delta = 0
          
             self.load_buttons()
@@ -49,15 +50,23 @@ class Game():
                 if event.type == pygame.QUIT:
                     self.playing = False
                     self.running = False
+                    self.songs_done.clear() 
 
                 if (event.type == pygame.USEREVENT and event.user_type == pygame_gui.UI_BUTTON_PRESSED):
                         if event.ui_element == self.info_button:
                             self.actions['info'] = True
+                            
                         if event.ui_element == self.info_to_title_button:
                                 self.actions['title'] = True
 
+                        if event.ui_element == self.play__to_title_button :
+                                 #self.songs_done.clear() 
+                                 self.actions['title'] = True
+
                         if event.ui_element == self.play_game_button:
                             self.actions['play'] = True
+
+                        
             
                 self.manager.process_events(event)
 
@@ -66,6 +75,12 @@ class Game():
                 self.info_button.show()
                 self.play_game_button.show()
                 self.info_to_title_button.hide()
+                self.play__to_title_button.hide()
+
+            if self.state == "Loading Menu":
+                self.info_button.hide()
+                self.play_game_button.hide()
+                
 
             if(self.state == "Info Menu"):
                 self.info_to_title_button.show()
@@ -75,6 +90,7 @@ class Game():
             if(self.state == "Play Game"):
                 self.info_button.hide()
                 self.play_game_button.hide()
+                self.play__to_title_button.show()
 
 
             self.manager.update(self.time_delta)
@@ -107,6 +123,11 @@ class Game():
                                              manager=self.manager)
 
             self.info_to_title_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((30, 30), (135, 50)),
+                                            text='Main Menu',
+                                             manager=self.manager)
+            
+            """TODO: Replace text to "Pause" which will go to pause state instead of title"""
+            self.play__to_title_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((30, 30), (135, 50)),
                                             text='Main Menu',
                                              manager=self.manager)
                                              
