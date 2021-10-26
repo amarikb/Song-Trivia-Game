@@ -26,10 +26,12 @@ class Game():
 
             self.state = "Title Menu"
             self.running, self.playing = True, True
-            self.actions = {"play": False, "info" : False, "title" : False, "start" : False}
+            self.actions = {"play": False, "info" : False, "title" : False, "start" : False , "win": False, "lose": False}
             self.state_stack = []
             self.songs_done = list()
             self.time_delta = 0
+            self.current_score = 0
+            self.high_score = 0
          
             self.load_buttons()
             self.load_assets()
@@ -50,6 +52,7 @@ class Game():
                 if event.type == pygame.QUIT:
                     self.playing = False
                     self.running = False
+                    self.score = 0
                     self.songs_done.clear() 
 
                 if (event.type == pygame.USEREVENT and event.user_type == pygame_gui.UI_BUTTON_PRESSED):
@@ -102,10 +105,7 @@ class Game():
             # Render current state to the screen
             self.screen.blit(pygame.transform.scale(self.game_canvas,(self.SCREEN_WIDTH, self.SCREEN_HEIGHT)), (0,0))
             self.manager.draw_ui(self.screen)
-            pygame.display.flip()
-        
-        def get_State(self):
-            return self.state         
+            pygame.display.flip() 
 
         def draw_text(self, surface, text, color, x, y , fontSize = 50, fontType ="NicoBold-Regular.ttf"):
             self.font = pygame.font.Font(os.path.join(self.font_dir,fontType), fontSize)
@@ -127,7 +127,7 @@ class Game():
                                              manager=self.manager)
             
             """TODO: Replace text to "Pause" which will go to pause state instead of title"""
-            self.play__to_title_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((30, 30), (135, 50)),
+            self.play__to_title_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((780, 3), (135, 50)),
                                             text='Main Menu',
                                              manager=self.manager)
                                              

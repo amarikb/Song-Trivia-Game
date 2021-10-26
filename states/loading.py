@@ -97,6 +97,6 @@ class Loading(State):
              #print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT
              self.lyrics = song_lyrics
              self.artist = artist_name
-             self.song_title = song.title
+             self.song_title = self.song.title
 
    

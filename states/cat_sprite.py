@@ -5,7 +5,7 @@ import pygame,os
 class Cat(State):
     def __init__(self,game):
         State.__init__(self, game)
-        self.state = self.game.get_State()
+        self.state = self.game.state
         self.load_cat_sprites()
         self.cat_rect = self.cat_walk[0].get_rect(midbottom = (0,150))
         self.current_cat_image = self.cat_walk[0]
