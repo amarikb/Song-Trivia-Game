@@ -9,10 +9,8 @@ class Song_Game(State):
         self.game.state = "Play Game"
         self.num_of_guesses = 0
         self.tries_left = 3
-        self.lyrics = lyrics
+        self.lyrics = lyrics.strip().replace("\n", ". ")
         self.song_title = song_name
-        print(self.song_title) #TODO : DELETE PRINT STATEMENT
-        print(song_name) #TODO : DELETE PRINT STATEMENT
         self.artist = artist_name 
         self.load_lyric_containers()       
 
@@ -48,9 +46,9 @@ class Song_Game(State):
         
     
     def load_lyric_containers(self):
-           self.text = '<font size=5 font color=#E784A2><b>           Lyrics: </b><br><br></font><font>' + self.lyrics + "</font>"
+           self.text = '<font size=5 font color=#E784A2><b>           Lyrics: </b><br><br></font>' + self.lyrics 
         
-           self.lyrics_container = pygame_gui.elements.UITextBox(self.text,
+           self.lyrics_container = pygame_gui.elements.UITextBox(self.lyrics,
                              pygame.Rect(self.game.GAME_W/2-10  , self.game.GAME_H/2-10, 400, 280),
                              manager=self.game.manager)
             
@@ -81,7 +79,7 @@ class Song_Game(State):
                 pass
 
             else:
-               if self.text_box.get_text() in self.song_title:
+               if self.text_box.get_text() == self.song_title:
                    self.add_score()
                    actions["win"] = True
                 

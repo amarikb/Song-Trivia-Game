@@ -28,7 +28,7 @@ class Game():
             self.running, self.playing = True, True
             self.actions = {"play": False, "info" : False, "title" : False, "start" : False , "win": False, "lose": False}
             self.state_stack = []
-            self.songs_done = list()
+            self.songs_done = []
             self.time_delta = 0
             self.current_score = 0
             self.high_score = 0

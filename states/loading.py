@@ -13,9 +13,17 @@ class Loading(State):
         self.lyrics = ""
         self.song_title = ""
         self.artist = ""
-        game_info_thread = threading.Thread(name='game_info', target=self.get_guessing_game_info)
-        game_info_thread.daemon = True
-        game_info_thread.start()
+      
+        try:
+             game_info_thread = threading.Thread(name='game_info', target=self.get_guessing_game_info)
+             game_info_thread.daemon = True
+             game_info_thread.start()
+        except ConnectionError as e:    # This is the correct syntax
+                 #print(e)
+                 print("caught")
+                 self.lyrics = None 
+                
+  
        
 
     def update(self, actions):
@@ -24,7 +32,7 @@ class Loading(State):
              new_state.enter_state()
 
         if(self.lyrics == None):
-            #print("this is true")
+            print("this is true")
             """
             TODO: ADD ERROR MESSAGE HERE (FOR WHEN WE CANT FIND LYRICS) AND GET SCORE AND CALCULATE HIGH SCORE
             display score 
@@ -44,7 +52,7 @@ class Loading(State):
         
 
 
-    def get_artist_names(self):
+    def get_artist_name(self):
         """
         ADD METHOD DESCRIPTION HERE
         """
@@ -66,24 +74,39 @@ class Loading(State):
         song_lyrics = ""
         song = ""
         artist = None 
-        genius = lyricsgenius.Genius()
+        genius = lyricsgenius.Genius(retries=3)
+        genius.skip_non_songs = True
     
         while artist == None:
-            artist_name = self.get_artist_names() 
-            artist = genius.search_artist(artist_name, max_songs=15, sort="title")
-
-        while song_lyrics  == "":
-            if(lyrics_tries == len(artist)):
-                    break
+            artist_name = self.get_artist_name() 
+            genius.excluded_terms = [artist_name,"(Remix)", "(Live)","(Demo)", "(Version)","(Edit)","(Bonus)", "(Intro)", "(Cover)", 
+        "(Cut)", "tour","(Black Magic*)","(Extended)","(Clean)","Import","(Booklet)", "(Broadway)"]
+        #,"liner notes", "credits", "interview", "skit", "instrumental", "setlist"] TODO: ADD IF NEEDED
         
-            self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
-
-            while self.song.title in self.game.songs_done:
+            artist = genius.search_artist(artist_name, max_songs=28, sort="title")
+                
+        
+        while song_lyrics  == "":
+            if(lyrics_tries == len(artist) or self.lyrics == None):
+                    break
+            try:
                 self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
-                lyrics_tries += 1
+            except ConnectionError as e: #TODO : FIX IF STILL NOT WORKING
+                self.lyrics = None
+                break
+            while self.song.title in self.game.songs_done:
+                try:
+                    self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
+                    lyrics_tries += 1
+                
+                except ConnectionError as e: #TODO : FIX IF STILL NOT WORKING
+                  self.lyrics = None
+                  break
+                    
+                   
 
             left_lyrics = self.song.lyrics.find("]",self.song.lyrics.find("[Chorus:")) + 1
-            song_lyrics = profanity.censor(self.song.lyrics[left_lyrics: self.song.lyrics.find("[",left_lyrics)])
+            song_lyrics = profanity.censor(self.song.lyrics[left_lyrics: self.song.lyrics.find("[",left_lyrics)],"-")
 
             if ("Lyrics from Snippet:" in song_lyrics):
                     song_lyrics = ""
@@ -93,6 +116,7 @@ class Loading(State):
         if(song_lyrics == ""):
             song_lyrics = None   # "no lyrics available"
         else:
+             
              self.game.songs_done.append(self.song.title)
              #print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT
              self.lyrics = song_lyrics
