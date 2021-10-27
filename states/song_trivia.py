@@ -46,9 +46,9 @@ class Song_Game(State):
         
     
     def load_lyric_containers(self):
-           self.text = '<font size=5 font color=#E784A2><b>           Lyrics: </b><br><br></font>' + self.lyrics 
+           self.text = '<font size=6 font color=#E784A2><b>         Lyrics: </b><br><br></font><font>' + self.lyrics + "</font>"
         
-           self.lyrics_container = pygame_gui.elements.UITextBox(self.lyrics,
+           self.lyrics_container = pygame_gui.elements.UITextBox(self.text,
                              pygame.Rect(self.game.GAME_W/2-10  , self.game.GAME_H/2-10, 400, 280),
                              manager=self.game.manager)
             
