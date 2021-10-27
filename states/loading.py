@@ -14,15 +14,10 @@ class Loading(State):
         self.song_title = ""
         self.artist = ""
       
-        try:
-             game_info_thread = threading.Thread(name='game_info', target=self.get_guessing_game_info)
-             game_info_thread.daemon = True
-             game_info_thread.start()
-        except ConnectionError as e:    # This is the correct syntax
-                 #print(e)
-                 print("caught")
-                 self.lyrics = None 
-                
+        game_info_thread = threading.Thread(name='game_info', target=self.get_guessing_game_info)
+        game_info_thread.daemon = True
+        game_info_thread.start()
+              
   
        
 
