@@ -86,7 +86,7 @@ class Loading(State):
                     break
             try:
                 self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
-            except ConnectionError as e: #TODO : FIX IF STILL NOT WORKING
+            except: #TODO : FIX IF STILL NOT WORKING
                 self.lyrics = None
                 break
             while self.song.title in self.game.songs_done:
@@ -94,7 +94,7 @@ class Loading(State):
                     self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
                     lyrics_tries += 1
                 
-                except ConnectionError as e: #TODO : FIX IF STILL NOT WORKING
+                except: #TODO : FIX IF STILL NOT WORKING
                   self.lyrics = None
                   break
                     

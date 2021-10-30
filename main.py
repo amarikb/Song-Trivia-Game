@@ -1,8 +1,6 @@
 import os,pygame,pygame_gui
 from states.titleMenu import Title
 
-FPS = 60 
-
 """
 "Pygame Game States Tutorial: Creating an In-game Menu using States", ChristianD37
 source: https://www.youtube.com/watch?v=b_DkQrJxpck
@@ -29,6 +27,7 @@ class Game():
             self.actions = {"play": False, "info" : False, "title" : False, "start" : False , "win": False, "lose": False}
             self.state_stack = []
             self.songs_done = []
+            self.clock = pygame.time.Clock()
             self.time_delta = 0
             self.current_score = 0
             self.high_score = 0
@@ -45,6 +44,7 @@ class Game():
                 self.get_events()
                 self.update()
                 self.render()
+                self.clock.tick(60)
 
         def get_events(self):
             for event in pygame.event.get():
@@ -149,6 +149,5 @@ class Game():
 
 if __name__ == "__main__":
     g = Game()
-    clock = pygame.time.Clock()
     while g.running:
         g.game_loop()

@@ -10,7 +10,9 @@ class Song_Game(State):
         self.num_of_guesses = 0
         self.tries_left = 3
         self.lyrics = lyrics.strip().replace("\n", ". ")
-        self.song_title = song_name
+        self.song_title = song_name[1:].lower().strip()
+        print(len(self.song_title))
+    
         self.artist = artist_name 
         self.load_lyric_containers()       
 
@@ -73,22 +75,22 @@ class Song_Game(State):
         
 
     def play_game(self,actions):
-    
+        guess = ""
         if(self.submit_guess_button.check_pressed()):
-            if self.text_box.get_text() == "":
+            guess = self.text_box.get_text()
+            if guess == "":
                 pass
-
             else:
-               if self.text_box.get_text() == self.song_title:
+               if guess.strip().lower() == self.song_title:
                    self.add_score()
                    actions["win"] = True
                 
                else:
-                    self.tries_left -= 1
+                   print("this is false")
+                   self.tries_left -= 1
     
         if self.tries_left == 0:
          actions["lose"] = True
-    
 
     def add_score(self):
         self.game.current_score +=10

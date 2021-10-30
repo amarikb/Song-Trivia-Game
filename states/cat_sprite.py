@@ -28,7 +28,6 @@ class Cat(State):
                     self.current_cat_image = self.cat_sit[0]
            
             elif self.cat_state == "sitting":
-                
                 self.cat_index = (self.cat_index + 1) % len(self.cat_sit)
                 self.current_cat_image = self.cat_sit[self.cat_index]
 
