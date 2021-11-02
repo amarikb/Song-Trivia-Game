@@ -1,20 +1,21 @@
 from states.state import State
 import states.titleMenu
-from states.cat_sprite import Cat
+from states.winmenu import Win
 import pygame,os,pygame_gui
 
 class Song_Game(State):
-    def __init__(self, game,lyrics,artist_name,song_name):
+    def __init__(self, game,lyrics,artist_name,song_name,song_img):
         State.__init__(self, game)
         self.game.state = "Play Game"
-        self.num_of_guesses = 0
         self.tries_left = 3
+        
         self.lyrics = lyrics.strip().replace("\n", ". ")
-        self.song_title = song_name[1:].lower().strip()
-        print(len(self.song_title))
-    
+        self.song_title = song_name.strip().lower() 
         self.artist = artist_name 
-        self.load_lyric_containers()       
+        self.img = song_img
+        
+        self.load_lyric_containers()  
+        print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT    
 
     def update(self, actions):
         """TODO: DELETE STATE TO TITLE AND ADD WIN AND LOSE STATE HERE"""
@@ -25,7 +26,9 @@ class Song_Game(State):
             new_state.enter_state()
 
         if actions["win"]:
-            self.hide_gui_elements()
+            self.lyrics_container.hide()
+            new_state = Win(self.game,self.artist,self.song_title,self.img)
+            new_state.enter_state()
             #ADD WAY TO GO TO WIN STATE HERE
         
         if actions["lose"]:
@@ -49,19 +52,20 @@ class Song_Game(State):
     
     def load_lyric_containers(self):
            self.text = '<font size=6 font color=#E784A2><b>         Lyrics: </b><br><br></font><font>' + self.lyrics + "</font>"
-        
+           #self.text = "hello" #TODO : DELETE PRINT STATEMENT
+
            self.lyrics_container = pygame_gui.elements.UITextBox(self.text,
                              pygame.Rect(self.game.GAME_W/2-10  , self.game.GAME_H/2-10, 400, 280),
                              manager=self.game.manager)
             
-           self.text_box = pygame_gui.elements.UITextEntryLine(pygame.Rect((self.game.GAME_W/2 + 45  , 450),
+           self.text_box = pygame_gui.elements.UITextEntryLine(pygame.Rect((self.game.GAME_W/2 + 40  , 450),
                                                                           (300, 50)),
                                                               manager=self.game.manager)
-           self.guess_label = pygame_gui.elements.UILabel(pygame.Rect((self.text_box.rect.width - 50,
-                                                                    452), (50,self.text_box.rect.height -3)),
+           self.guess_label = pygame_gui.elements.UILabel(pygame.Rect((self.text_box.rect.width - 55,
+                                                                    452), (50,self.text_box.rect.height -3.8)),
                                                         "Guess:",
                                                         manager=self.game.manager)
-           self.submit_guess_button = pygame_gui.elements.UIButton(pygame.Rect((589, 450),
+           self.submit_guess_button = pygame_gui.elements.UIButton(pygame.Rect((584, 450),
                                                                     (75, self.text_box.rect.height)),
                                                         'submit',
                                                         manager=self.game.manager,
@@ -81,17 +85,21 @@ class Song_Game(State):
             if guess == "":
                 pass
             else:
+               #print(guess) #TODO : DELETE PRINT STATEMENT
+               #print(self.song_title) #TODO : DELETE PRINT STATEMENT
                if guess.strip().lower() == self.song_title:
+               #if guess.strip().lower() == "hello": #TODO : DELETE PRINT STATEMENT
                    self.add_score()
                    actions["win"] = True
                 
                else:
-                   print("this is false")
+                   print("this is false") #TODO : DELETE PRINT STATEMENT
                    self.tries_left -= 1
     
         if self.tries_left == 0:
          actions["lose"] = True
 
+    
     def add_score(self):
         self.game.current_score +=10
 

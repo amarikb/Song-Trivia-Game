@@ -13,6 +13,8 @@ class Loading(State):
         self.lyrics = ""
         self.song_title = ""
         self.artist = ""
+        self.img = ""
+
       
         game_info_thread = threading.Thread(name='game_info', target=self.get_guessing_game_info)
         game_info_thread.daemon = True
@@ -23,7 +25,7 @@ class Loading(State):
 
     def update(self, actions):
         if(self.lyrics != ""):
-             new_state = Song_Game(self.game,self.lyrics,self.artist,self.song_title)
+             new_state = Song_Game(self.game,self.lyrics,self.artist,self.song_title,self.img)
              new_state.enter_state()
 
         if(self.lyrics == None):
@@ -89,6 +91,7 @@ class Loading(State):
             except: #TODO : FIX IF STILL NOT WORKING
                 self.lyrics = None
                 break
+
             while self.song.title in self.game.songs_done:
                 try:
                     self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
@@ -98,8 +101,6 @@ class Loading(State):
                   self.lyrics = None
                   break
                     
-                   
-
             left_lyrics = self.song.lyrics.find("]",self.song.lyrics.find("[Chorus:")) + 1
             song_lyrics = profanity.censor(self.song.lyrics[left_lyrics: self.song.lyrics.find("[",left_lyrics)],"-")
 
@@ -111,11 +112,12 @@ class Loading(State):
         if(song_lyrics == ""):
             song_lyrics = None   # "no lyrics available"
         else:
-             
              self.game.songs_done.append(self.song.title)
              #print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT
+             print(self.song.song_art_image_url) #TODO : DELETE PRINT STATEMENT
              self.lyrics = song_lyrics
              self.artist = artist_name
-             self.song_title = self.song.title
+             self.img = self.song.song_art_image_url
+             self.song_title = self.song.title.encode('ascii', 'ignore').decode("utf-8")
 
    
