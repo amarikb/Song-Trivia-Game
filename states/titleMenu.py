@@ -43,6 +43,7 @@ class Title(State):
         self.game.draw_text(display, "Trivia", (64,64,64), self.game.GAME_W/2, self.game.GAME_H/2) 
         self.game.draw_text(display, "Game", (64,64,64), self.game.GAME_W/2, self.game.GAME_H/2 + 70)
         self.game.draw_text(display, "High Score: ", (255,255,102),320,10,30,"AvenuePixel-Regular.ttf")
+        self.game.draw_text(display, str(self.game.high_score), (0,0,0),370,11,30,"AvenuePixel-Regular.ttf")
         self.cat.render(display)
 
 

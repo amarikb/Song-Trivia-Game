@@ -1,8 +1,9 @@
 from states.state import State
+import states.titleMenu
 from states.song_trivia import Song_Game
 import pygame,os,threading,random,json,time
 from better_profanity import profanity
-import lyricsgenius
+import lyricsgenius,socket
 from dotenv import load_dotenv
 
 class Loading(State):
@@ -14,6 +15,7 @@ class Loading(State):
         self.song_title = ""
         self.artist = ""
         self.img = ""
+        self.error = False
 
       
         game_info_thread = threading.Thread(name='game_info', target=self.get_guessing_game_info)
@@ -24,12 +26,17 @@ class Loading(State):
        
 
     def update(self, actions):
-        if(self.lyrics != ""):
+        if(self.lyrics != "" and self.lyrics != None):
              new_state = Song_Game(self.game,self.lyrics,self.artist,self.song_title,self.img)
              new_state.enter_state()
 
         if(self.lyrics == None):
-            print("this is true")
+            print("this is true in update")
+
+            """TODO: DELETE BELOW LATER ADD ANOTHER STATE 'ERRORMENU'"""
+            #self.game.songs_done.clear()
+            new_state = states.titleMenu.Title(self.game)
+            new_state.enter_state()
             """
             TODO: ADD ERROR MESSAGE HERE (FOR WHEN WE CANT FIND LYRICS) AND GET SCORE AND CALCULATE HIGH SCORE
             display score 
@@ -84,22 +91,27 @@ class Loading(State):
                 
         
         while song_lyrics  == "":
-            if(lyrics_tries == len(artist) or self.lyrics == None):
+            if(lyrics_tries == len(artist) or self.error):
                     break
             try:
                 self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
-            except: #TODO : FIX IF STILL NOT WORKING
-                self.lyrics = None
-                break
+            except socket.timeout as e: #TODO : FIX IF STILL NOT WORKING
+                self.error = True
+                #print('this is true 1',e) #TODO DELETE PRINT STATEMENT
+                continue
+                
 
             while self.song.title in self.game.songs_done:
+                if self.error:
+                    break
                 try:
                     self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
                     lyrics_tries += 1
                 
-                except: #TODO : FIX IF STILL NOT WORKING
-                  self.lyrics = None
-                  break
+                except (socket.timeout,IndexError) as e: #TODO : FIX IF STILL NOT WORKING 
+                  self.error = True
+                  #print('this is true 2', e) #TODO DELETE PRINT STATEMENT
+                  continue
                     
             left_lyrics = self.song.lyrics.find("]",self.song.lyrics.find("[Chorus:")) + 1
             song_lyrics = profanity.censor(self.song.lyrics[left_lyrics: self.song.lyrics.find("[",left_lyrics)],"-")
@@ -109,8 +121,8 @@ class Loading(State):
 
             lyrics_tries += 1
 
-        if(song_lyrics == ""):
-            song_lyrics = None   # "no lyrics available"
+        if(song_lyrics == "" or self.error == True):
+            self.lyrics = None   # "no lyrics available"
         else:
              self.game.songs_done.append(self.song.title)
              #print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT

@@ -1,6 +1,7 @@
 from states.state import State
 import states.titleMenu
 from states.winmenu import Win
+from states.losemenu import Lose
 import pygame,os,pygame_gui
 
 class Song_Game(State):
@@ -8,7 +9,6 @@ class Song_Game(State):
         State.__init__(self, game)
         self.game.state = "Play Game"
         self.tries_left = 3
-        
         self.lyrics = lyrics.strip().replace("\n", ". ")
         self.song_title = song_name.strip().lower() 
         self.artist = artist_name 
@@ -18,9 +18,9 @@ class Song_Game(State):
         print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT    
 
     def update(self, actions):
-        """TODO: DELETE STATE TO TITLE AND ADD WIN AND LOSE STATE HERE"""
+        """TODO: ADD PAUSE STATE HERE"""
         self.play_game(actions)
-        if actions["title"]:
+        if actions["pause"]:
             self.hide_gui_elements()
             new_state = states.titleMenu.Title(self.game)
             new_state.enter_state()
@@ -29,22 +29,24 @@ class Song_Game(State):
             self.lyrics_container.hide()
             new_state = Win(self.game,self.artist,self.song_title,self.img)
             new_state.enter_state()
-            #ADD WAY TO GO TO WIN STATE HERE
         
         if actions["lose"]:
             self.hide_gui_elements()
-           #ADD WAY TO GO TO LOSE STATE HERE
+            new_state = Lose(self.game,self.artist,self.song_title,self.img)
+            new_state.enter_state()
+
         self.game.reset_keys()
 
     def render(self, display):
-      
         background = pygame.image.load(os.path.join(self.game.assets_graphics_dir,"background", "PixelSky1.png")).convert_alpha()
         background = pygame.transform.scale(background, (540,300))
         display.blit(background, (0, 0)) 
-        self.game.draw_text(display, "High Score: ", (0,0,0),320,10,30,"AvenuePixel-Regular.ttf")
-        self.game.draw_text(display, str(self.game.high_score), (0,0,0),370,12,30,"AvenuePixel-Regular.ttf")
-        self.game.draw_text(display, "Score: ", (0,0,0),50,10,30,"AvenuePixel-Regular.ttf")
-        self.game.draw_text(display, str(self.game.current_score), (0,0,0),85,12,30,"AvenuePixel-Regular.ttf")
+
+        if(self.game.state != "Lose"):
+            self.game.draw_text(display, "High Score: ", (0,0,0),300,10,30,"AvenuePixel-Regular.ttf")
+            self.game.draw_text(display, str(self.game.high_score), (0,0,0),355,12,30,"AvenuePixel-Regular.ttf")
+            self.game.draw_text(display, "Score: ", (0,0,0),50,10,30,"AvenuePixel-Regular.ttf")
+            self.game.draw_text(display, str(self.game.current_score), (0,0,0),85,12,30,"AvenuePixel-Regular.ttf")
         self.game.draw_text(display, "Tries Left: ", (0,76,153),163,50,20,"NicoPups-Regular.ttf")
         self.game.draw_text(display,str(self.tries_left),(0,0,0),215,50,20,"NicoPups-Regular.ttf")
      
@@ -90,16 +92,21 @@ class Song_Game(State):
                if guess.strip().lower() == self.song_title:
                #if guess.strip().lower() == "hello": #TODO : DELETE PRINT STATEMENT
                    self.add_score()
+                   self.check_high_score()
                    actions["win"] = True
                 
                else:
-                   print("this is false") #TODO : DELETE PRINT STATEMENT
                    self.tries_left -= 1
     
         if self.tries_left == 0:
+         self.check_high_score()
          actions["lose"] = True
 
     
     def add_score(self):
         self.game.current_score +=10
+
+    def check_high_score(self):
+        if self.game.current_score > self.game.high_score:
+            self.game.high_score = self.game.current_score
 

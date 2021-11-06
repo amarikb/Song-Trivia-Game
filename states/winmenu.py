@@ -11,7 +11,7 @@ class Win(State):
         self.game = game
         State.__init__(self, game)
         self.game.state = "Win"
-        self.win_menu = pygame.image.load(os.path.join(self.game.assets_graphics_dir,"background", "winmenu.png"))
+        self.win_menu = pygame.image.load(os.path.join(self.game.assets_graphics_dir,"background", "winlosemenu.png"))
         self.artist_name = artist
         self.song_name = song
         img_request = requests.get(img)

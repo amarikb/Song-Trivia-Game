@@ -25,7 +25,7 @@ class Game():
 
             self.state = "Title Menu"
             self.running, self.playing = True, True
-            self.actions = {"play": False, "info" : False, "title" : False, "pause" : False , "win": False, "lose": False}
+            self.actions = {"play": False, "restart": False, "info" : False, "title" : False, "pause" : False , "win": False, "lose": False}
             self.state_stack = []
             self.songs_done = []
             self.clock = pygame.time.Clock()
@@ -77,6 +77,11 @@ class Game():
                                 self.songs_done.clear() 
                                 self.actions['title'] = True
 
+                        if event.ui_element == self.restart_button:
+                                self.current_score = 0
+                                self.songs_done.clear() 
+                                self.actions['restart'] = True
+
                         if event.ui_element == self.stop_music_button:
                                 pygame.mixer.music.pause()
                                 self.play_music_button.show()
@@ -102,6 +107,7 @@ class Game():
                 self.pause_button.hide()
                 self.keep_playing_button.hide()
                 self.quit_button.hide()
+                self.restart_button.hide()
 
             if self.state == "Loading Menu":
                 self.info_button.hide()
@@ -109,6 +115,7 @@ class Game():
                 self.keep_playing_button.hide()
                 self.quit_button.hide()
                 self.pause_button.hide()
+                self.restart_button.hide()
                 
             if(self.state == "Info Menu"):
                 self.info_to_title_button.show()
@@ -120,11 +127,17 @@ class Game():
                 self.play_game_button.hide()
                 self.keep_playing_button.hide()
                 self.quit_button.hide()
+                self.restart_button.hide()
                 self.pause_button.show()
 
             
             if(self.state == "Win"):
                self.keep_playing_button.show()
+               self.quit_button.show()
+
+            
+            if(self.state == "Lose"):
+               self.restart_button.show()
                self.quit_button.show()
 
 
@@ -183,6 +196,13 @@ class Game():
                                             text='music off',
                                              manager=self.manager,
                                             object_id='#win_button')
+            
+            self.restart_button =  pygame_gui.elements.UIButton(relative_rect=pygame.Rect((460, 405), (90, 40)),
+                                            text='Restart',
+                                             manager=self.manager,
+                                            object_id='#win_button')
+            
+            
 
             
                                              
