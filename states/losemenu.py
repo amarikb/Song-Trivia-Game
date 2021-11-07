@@ -43,7 +43,7 @@ class Lose(State):
 
         self.game.draw_text(display, "Score:", (51,102,204),155,95,20,"AvenuePixel-Regular.ttf")
         self.game.draw_text(display, str(self.game.current_score), (0,0,0),180,96,20,"AvenuePixel-Regular.ttf")
-        self.game.draw_text(display, "High Score:", (51,102,204),255,95,20,"AvenuePixel-Regular.ttf")
+        self.game.draw_text(display, "High Score:", (51,102,204),255,94,20,"AvenuePixel-Regular.ttf")
         self.game.draw_text(display, str(self.game.high_score), (0,0,0),295,96,20,"AvenuePixel-Regular.ttf")
        
         
