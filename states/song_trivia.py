@@ -1,5 +1,5 @@
 from states.state import State
-import states.titleMenu
+from states.pausemenu import Pause
 from states.winmenu import Win
 from states.losemenu import Lose
 import pygame,os,pygame_gui
@@ -9,20 +9,20 @@ class Song_Game(State):
         State.__init__(self, game)
         self.game.state = "Play Game"
         self.tries_left = 3
+        
         self.lyrics = lyrics.strip().replace("\n", ". ")
         self.song_title = song_name.strip().lower() 
         self.artist = artist_name 
         self.img = song_img
         
         self.load_lyric_containers()  
-        print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT    
+        #print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT    
 
     def update(self, actions):
         """TODO: ADD PAUSE STATE HERE"""
         self.play_game(actions)
         if actions["pause"]:
-            self.hide_gui_elements()
-            new_state = states.titleMenu.Title(self.game)
+            new_state = Pause(self.game)
             new_state.enter_state()
 
         if actions["win"]:

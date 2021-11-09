@@ -1,5 +1,6 @@
-import os,pygame,pygame_gui
+import os,pygame,pygame_gui,json
 from states.titleMenu import Title
+
 
 """
 "Pygame Game States Tutorial: Creating an In-game Menu using States", ChristianD37
@@ -25,13 +26,15 @@ class Game():
 
             self.state = "Title Menu"
             self.running, self.playing = True, True
-            self.actions = {"play": False, "restart": False, "info" : False, "title" : False, "pause" : False , "win": False, "lose": False}
+            self.actions = {"play": False, "restart": False, "info" : False, "title" : False, "pause" : False ,"unpause": False, "win": False, "lose": False}
             self.state_stack = []
             self.songs_done = []
             self.clock = pygame.time.Clock()
             self.time_delta = 0
             self.current_score = 0
-            self.high_score = 0
+            self.high_score = self.load_high_score()
+
+            print(self.load_high_score())
          
             self.load_buttons()
             self.load_assets()
@@ -54,6 +57,7 @@ class Game():
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
+                    self.save_high_score()
                     self.playing = False
                     self.running = False
                     self.songs_done.clear() 
@@ -68,16 +72,19 @@ class Game():
                         if event.ui_element == self.pause_button:
                                 #self.songs_done.clear() 
                                 self.actions['pause'] = True
+                        
+                        if event.ui_element == self.unpause_button:
+                                self.actions['unpause'] = True
 
                         if event.ui_element == self.play_game_button or event.ui_element == self.keep_playing_button:
                                 self.actions['play'] = True
 
-                        if event.ui_element == self.quit_button:
+                        if event.ui_element == self.quit_button or event.ui_element == self.pause_quit_button:
                                 self.current_score = 0
                                 self.songs_done.clear() 
                                 self.actions['title'] = True
 
-                        if event.ui_element == self.restart_button:
+                        if event.ui_element == self.restart_button or event.ui_element == self.restart_pause_button:
                                 self.current_score = 0
                                 self.songs_done.clear() 
                                 self.actions['restart'] = True
@@ -92,11 +99,8 @@ class Game():
                         if event.ui_element == self.play_music_button:
                                 pygame.mixer.music.unpause()
                                 self.stop_music_button.show()
-                                self.play_music_button.hide()
+                                self.play_music_button.hide()         
 
-
-                        
-            
                 self.manager.process_events(event)
 
         def update(self):
@@ -108,6 +112,9 @@ class Game():
                 self.keep_playing_button.hide()
                 self.quit_button.hide()
                 self.restart_button.hide()
+                self.pause_quit_button.hide()
+                self.restart_pause_button.hide()
+                self.unpause_button.hide()
 
             if self.state == "Loading Menu":
                 self.info_button.hide()
@@ -127,7 +134,10 @@ class Game():
                 self.play_game_button.hide()
                 self.keep_playing_button.hide()
                 self.quit_button.hide()
+                self.pause_quit_button.hide()
                 self.restart_button.hide()
+                self.restart_pause_button.hide()
+                self.unpause_button.hide()
                 self.pause_button.show()
 
             
@@ -140,8 +150,12 @@ class Game():
                self.restart_button.show()
                self.quit_button.show()
 
-
-
+            if(self.state == "Pause"):
+                self.pause_quit_button.show()
+                self.restart_pause_button.show()
+                self.unpause_button.show()
+               
+         
             self.manager.update(self.time_delta)
             self.state_stack[-1].update(self.actions)
 
@@ -176,12 +190,22 @@ class Game():
                                             text='Pause',
                                              manager=self.manager)
 
+            self.unpause_button =  pygame_gui.elements.UIButton(relative_rect=pygame.Rect((735, 330), (95, 40)),
+                                            text='Unpause',
+                                             manager=self.manager,
+                                             object_id='#win_button')
+
         
-            self.quit_button =  pygame_gui.elements.UIButton(relative_rect=pygame.Rect((355, 405), (60, 40)),
+            self.quit_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((355, 405), (60, 40)),
                                             text='Quit',
                                              manager=self.manager,
                                             object_id='#win_button')
         
+            self.pause_quit_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((735, 210), (95, 40)),
+                                            text='Quit',
+                                             manager=self.manager,
+                                            object_id='#win_button')
+
             self.keep_playing_button =  pygame_gui.elements.UIButton(relative_rect=pygame.Rect((460, 405), (90, 40)),
                                             text='Keep Going',
                                              manager=self.manager,
@@ -200,12 +224,29 @@ class Game():
             self.restart_button =  pygame_gui.elements.UIButton(relative_rect=pygame.Rect((460, 405), (90, 40)),
                                             text='Restart',
                                              manager=self.manager,
+                                            object_id='#win_button') 
+                                            
+            self.restart_pause_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((735, 270), (95, 40)),
+                                            text='Restart',
+                                             manager=self.manager,
                                             object_id='#win_button')
+            
+        
             
             
 
             
-                                             
+        def save_high_score(self):
+            high_score_dict = {"high score" : self.high_score}
+            with open("data/high_score_data.json", 'w') as f:  
+                json.dump(high_score_dict, f)
+            
+
+        def load_high_score(self):
+            with open("./data/high_score_data.json") as score:
+                high_score = json.load(score)    
+            score.close()
+            return high_score["high score"]
 
         def load_assets(self):
             self.assets_dir = os.path.join("assets")

@@ -62,6 +62,7 @@ class Loading(State):
         """
         with open("./data/artist_names.json") as names:
             artist_names = json.load(names)
+        names.close()
 
         random.seed(time.time())
         random_key_num = str(random.randint(0,len(artist_names) - 1))
