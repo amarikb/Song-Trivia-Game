@@ -1,11 +1,10 @@
 # Song Trivia Game
-=============
 
 ## Table Of Contents
 -------------
 * [General Info](#general-info)
 * [Showcase](#Showcase)
-* [Built With](#Buit With)
+* [Built With](#Built With)
 * [Credits](#Credits)
 
 
@@ -17,6 +16,21 @@ Guessing Song Game  - Guess the song by its lyrics. Built with pygame and Python
 -------------
 ### Title Page
 ![](https://github.com/amarikb/Song-Trivia-Game/data/titlepage.gif)
+
+### Info Page
+![](https://github.com/amarikb/Song-Trivia-Game/data/infopage.gif)
+
+### Game Page/ Win Page
+![](https://github.com/amarikb/Song-Trivia-Game/data/infopage.gif)
+
+### Pause Page
+![](https://github.com/amarikb/Song-Trivia-Game/data/pausepage.gif)
+
+### Lose Page 
+![](https://github.com/amarikb/Song-Trivia-Game/data/losepage.gif)
+
+### High Score Saved
+
 
 ## Built With
 -------------
