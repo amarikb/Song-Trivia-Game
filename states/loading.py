@@ -3,10 +3,15 @@ import states.titleMenu
 from states.song_trivia import Song_Game
 import pygame,os,threading,random,json,time
 from better_profanity import profanity
-import lyricsgenius,socket
+import lyricsgenius
+from requests.exceptions import HTTPError, Timeout
 from dotenv import load_dotenv
 
 class Loading(State):
+    """
+        A state class to represent loading page to account for loading times of the 
+        various game info from lyricsgenius API 
+    """
     def __init__(self, game):
         State.__init__(self, game)
         self.game.state = "Loading Menu"
@@ -16,14 +21,13 @@ class Loading(State):
         self.artist = ""
         self.img = ""
         self.error = False
+        profanity.load_censor_words()
 
       
         game_info_thread = threading.Thread(name='game_info', target=self.get_guessing_game_info)
         game_info_thread.daemon = True
         game_info_thread.start()
-              
-  
-       
+    
 
     def update(self, actions):
         if(self.lyrics != "" and self.lyrics != None):
@@ -31,17 +35,8 @@ class Loading(State):
              new_state.enter_state()
 
         if(self.lyrics == None):
-            print("this is true in update")
-
-            """TODO: DELETE BELOW LATER ADD ANOTHER STATE 'ERRORMENU'"""
-            #self.game.songs_done.clear()
             new_state = states.titleMenu.Title(self.game)
             new_state.enter_state()
-            """
-            TODO: ADD ERROR MESSAGE HERE (FOR WHEN WE CANT FIND LYRICS) AND GET SCORE AND CALCULATE HIGH SCORE
-            display score 
-            Add button "ok" that will go to main screen 
-            """ 
 
         self.game.reset_keys()
 
@@ -58,7 +53,7 @@ class Loading(State):
 
     def get_artist_name(self):
         """
-        ADD METHOD DESCRIPTION HERE
+        Returns a random artist name from a json file 
         """
         with open("./data/artist_names.json") as names:
             artist_names = json.load(names)
@@ -73,7 +68,9 @@ class Loading(State):
     
     def get_guessing_game_info(self):
         """
-        ADD METHOD DESCRIPTION HERE
+            Finds the song lyrics for guessing game from random artist's name
+            Uses lyricsgenius API and get_artist_name method and sets lyrics, artist name,
+            song cover image and song title to be displayed in game page 
         """
         lyrics_tries = 0
         song_lyrics = ""
@@ -85,9 +82,9 @@ class Loading(State):
         while artist == None:
             artist_name = self.get_artist_name() 
             genius.excluded_terms = [artist_name,"(Remix)", "(Live)","(Demo)", "(Version)","(Edit)","(Bonus)", "(Intro)", "(Cover)", 
-        "(Cut)", "tour","(Black Magic*)","(Extended)","(Clean)","Import","(Booklet)", "(Broadway)"]
-        #,"liner notes", "credits", "interview", "skit", "instrumental", "setlist"] TODO: ADD IF NEEDED
-        
+        "(Cut)", "tour","(Black Magic*)","(Extended)","(Clean)","Import","(Booklet)", "(Broadway)"
+         ,"liner notes", "credits", "interview", "skit", "instrumental", "setlist"] 
+
             artist = genius.search_artist(artist_name, max_songs=28, sort="title")
                 
         
@@ -96,9 +93,8 @@ class Loading(State):
                     break
             try:
                 self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
-            except socket.timeout as e: #TODO : FIX IF STILL NOT WORKING
+            except(HTTPError, Timeout): #TODO : FIX IF STILL NOT WORKING
                 self.error = True
-                #print('this is true 1',e) #TODO DELETE PRINT STATEMENT
                 continue
                 
 
@@ -109,9 +105,8 @@ class Loading(State):
                     self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
                     lyrics_tries += 1
                 
-                except (socket.timeout,IndexError) as e: #TODO : FIX IF STILL NOT WORKING 
+                except (HTTPError, Timeout,IndexError) as e: #TODO : FIX IF STILL NOT WORKING 
                   self.error = True
-                  #print('this is true 2', e) #TODO DELETE PRINT STATEMENT
                   continue
                     
             left_lyrics = self.song.lyrics.find("]",self.song.lyrics.find("[Chorus:")) + 1
@@ -126,11 +121,9 @@ class Loading(State):
             self.lyrics = None   # "no lyrics available"
         else:
              self.game.songs_done.append(self.song.title)
-             #print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT
-             print(self.song.song_art_image_url) #TODO : DELETE PRINT STATEMENT
              self.lyrics = song_lyrics
              self.artist = artist_name
              self.img = self.song.song_art_image_url
-             self.song_title = self.song.title.encode('ascii', 'ignore').decode("utf-8")
+             self.song_title = self.song.title.encode('ascii', 'ignore').decode("utf-8") #removes any unicode characters in song title
 
    

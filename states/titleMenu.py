@@ -8,6 +8,9 @@ from states.info_menu import Info
 
 
 class Title(State):
+    """
+    A state class to represent title page of the guessing game.
+    """
     def __init__(self, game):
         State.__init__(self, game)
         self.game.state = "Title Menu"

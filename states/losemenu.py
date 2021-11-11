@@ -7,6 +7,9 @@ import io
 
 class Lose(State):
     def __init__(self, game, artist, song, img):
+        """
+            A state class to represent game over when the song title is not guessed in three tries.
+        """
         pygame.mixer.music.pause()
         self.game = game
         State.__init__(self, game)

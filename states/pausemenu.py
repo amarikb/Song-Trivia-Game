@@ -4,6 +4,10 @@ import states.titleMenu
 
 class Pause(State):
     def __init__(self, game):
+        """
+             A state class to represent a menu when the game is paused.
+             displays buttons to navigate throughtout the game.
+        """
         pygame.mixer.music.pause()
         self.game = game
         State.__init__(self, game)

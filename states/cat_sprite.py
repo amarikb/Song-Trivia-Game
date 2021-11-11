@@ -3,6 +3,9 @@ from states.state import State
 import pygame,os
 
 class Cat(State):
+    """
+    A state class to represent a cat and its animation in title and info page
+    """
     def __init__(self,game):
         State.__init__(self, game)
         self.state = self.game.state
@@ -14,6 +17,7 @@ class Cat(State):
     
 
     def display_animation(self):
+        """Animates different cat movements depending of which page the game is displaying"""
         if self.state == "Title Menu":
 
             if self.cat_state == "walking":

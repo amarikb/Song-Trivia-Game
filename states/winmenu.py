@@ -7,6 +7,9 @@ import io
 
 class Win(State):
     def __init__(self, game, artist, song, img):
+        """
+            A state class to represent game level win when song name is guessed correctly.
+        """
         pygame.mixer.music.pause()
         self.game = game
         State.__init__(self, game)

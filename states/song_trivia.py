@@ -5,6 +5,10 @@ from states.losemenu import Lose
 import pygame,os,pygame_gui
 
 class Song_Game(State):
+    """
+    A state class to represent the guessing game page.
+    displays game info to play the game and guess the song name after loading.
+    """
     def __init__(self, game,lyrics,artist_name,song_name,song_img):
         State.__init__(self, game)
         self.game.state = "Play Game"
@@ -16,10 +20,10 @@ class Song_Game(State):
         self.img = song_img
         
         self.load_lyric_containers()  
-        #print(self.game.songs_done) #TODO : DELETE PRINT STATEMENT    
+       
 
     def update(self, actions):
-        """TODO: ADD PAUSE STATE HERE"""
+
         self.play_game(actions)
         if actions["pause"]:
             new_state = Pause(self.game)
@@ -53,8 +57,10 @@ class Song_Game(State):
         
     
     def load_lyric_containers(self):
+           """
+            Displays all the required game gui for guessing the song name (lyrics, text box, guess button)
+           """
            self.text = '<font size=6 font color=#E784A2><b>         Lyrics: </b><br><br></font><font>' + self.lyrics + "</font>"
-           #self.text = "hello" #TODO : DELETE PRINT STATEMENT
 
            self.lyrics_container = pygame_gui.elements.UITextBox(self.text,
                              pygame.Rect(self.game.GAME_W/2-10  , self.game.GAME_H/2-10, 400, 280),
@@ -81,16 +87,17 @@ class Song_Game(State):
         
 
     def play_game(self,actions):
+        """
+          Implements guessing game and gets user's guess and determines if it matches song name/
+          User loses if number of tries reaches 0 or wins if guess is correct.
+        """
         guess = ""
         if(self.submit_guess_button.check_pressed()):
             guess = self.text_box.get_text()
             if guess == "":
                 pass
             else:
-               #print(guess) #TODO : DELETE PRINT STATEMENT
-               #print(self.song_title) #TODO : DELETE PRINT STATEMENT
                if guess.strip().lower() == self.song_title:
-               #if guess.strip().lower() == "hello": #TODO : DELETE PRINT STATEMENT
                    self.add_score()
                    self.check_high_score()
                    actions["win"] = True

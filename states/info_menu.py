@@ -4,6 +4,10 @@ from states.cat_sprite import Cat
 import pygame,os,pygame_gui
 
 class Info(State):
+    """
+    A state class to represent an info page.
+    displays info on how to play the guessing game.
+    """
     def __init__(self, game):
         State.__init__(self, game)
         self.game.state = "Info Menu"

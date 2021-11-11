@@ -33,8 +33,6 @@ class Game():
             self.time_delta = 0
             self.current_score = 0
             self.high_score = self.load_high_score()
-
-            print(self.load_high_score())
          
             self.load_buttons()
             self.load_assets()
