@@ -2,7 +2,7 @@
 ========================
 Guessing Song Game  - Guess the song by its lyrics. Built with pygame and Python
 
-##Table Of Contents
+## Table Of Contents
 -------------
 * [General Info](#general-info)
 * [Showcase](#Showcase)
@@ -10,16 +10,16 @@ Guessing Song Game  - Guess the song by its lyrics. Built with pygame and Python
 * [Credits](#setup)
 
 
-##General Info
+## General Info
 -------------
 
 
-##Showcase
+## Showcase
 -------------
-###Title Page
+### Title Page
 ![](https://github.com/amarikb/Song-Trivia-Game/data/titlepage.gif)
 
-##Built With
+## Built With
 -------------
 The project is created with:
 * [Python3](https://www.python.org) 
@@ -28,5 +28,5 @@ The project is created with:
 * [Pygame_gui](https://pygame-gui.readthedocs.io/en/latest/)
 
 
-##Credits
+## Credits
 -------------
