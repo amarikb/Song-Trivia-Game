@@ -23,7 +23,7 @@ Song Trivia is a game in which the player will attempt to guess the song name fr
 ![](https://github.com/amarikb/Song-Trivia-Game/blob/main/data/readme/infopage.gif)
 
 ### Loading Page
-
+![](https://github.com/amarikb/Song-Trivia-Game/blob/main/data/readme/loadingpage.gif)
 
 ### Game Page/ Win Page
 ![](https://github.com/amarikb/Song-Trivia-Game/blob/main/data/readme/gamepage.gif)
@@ -52,7 +52,7 @@ Background Skies made by Digital Moons:
 [https://digitalmoons.itch.io/pixel-skies](https://digitalmoons.itch.io/pixel-skies)
 
 Font made by J.D. Jimenez and emhuo:
-[https://jdjimenez.itch.io/avenue-pixel](https://jdjimenez.itch.io/avenue-pixel) (License for font  
+[https://jdjimenez.itch.io/avenue-pixel](https://jdjimenez.itch.io/avenue-pixel) ([License for font](https://docs.google.com/document/d/1GswMiU30K4C09jPWKWTYDtdHQ5PcxebwiBGdHvPt4W4/edit))
 [https://itch.io/queue/c/1141128/gamedev?game_id=1112500](https://itch.io/queue/c/1141128/gamedev?game_id=1112500)
 
 Cat Sprites made by Elthen's Pixel Art Shop:
