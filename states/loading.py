@@ -4,7 +4,7 @@ from states.song_trivia import Song_Game
 import pygame,os,threading,random,json,time
 from better_profanity import profanity
 import lyricsgenius
-from requests.exceptions import HTTPError, Timeout
+from requests.exceptions import HTTPError, Timeout #ReadTimeout,ConnectionError,
 from dotenv import load_dotenv
 
 class Loading(State):
@@ -76,7 +76,7 @@ class Loading(State):
         song_lyrics = ""
         song = ""
         artist = None 
-        genius = lyricsgenius.Genius(retries=3)
+        genius = lyricsgenius.Genius(timeout=120,retries=3) 
         genius.skip_non_songs = True
     
         while artist == None:
@@ -93,7 +93,7 @@ class Loading(State):
                     break
             try:
                 self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
-            except(HTTPError, Timeout): #TODO : FIX IF STILL NOT WORKING
+            except(HTTPError, Timeout): 
                 self.error = True
                 continue
                 
@@ -105,7 +105,7 @@ class Loading(State):
                     self.song = genius.search_song(artist.songs[lyrics_tries].title, artist_name)
                     lyrics_tries += 1
                 
-                except (HTTPError, Timeout,IndexError) as e: #TODO : FIX IF STILL NOT WORKING 
+                except(HTTPError, Timeout,IndexError):
                   self.error = True
                   continue
                     
