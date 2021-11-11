@@ -77,6 +77,8 @@ class Loading(State):
         song = ""
         artist = None 
         genius = lyricsgenius.Genius(timeout=120,retries=3) 
+        
+        genius.verbose = False
         genius.skip_non_songs = True
     
         while artist == None:
