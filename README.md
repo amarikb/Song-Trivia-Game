@@ -1,18 +1,17 @@
 # Song Trivia Game
-========================
-Guessing Song Game  - Guess the song by its lyrics. Built with pygame and Python
+=============
 
 ## Table Of Contents
 -------------
 * [General Info](#general-info)
 * [Showcase](#Showcase)
-* [Built With](#technologies)
-* [Credits](#setup)
+* [Built With](#Buit With)
+* [Credits](#Credits)
 
 
 ## General Info
 -------------
-
+Guessing Song Game  - Guess the song by its lyrics. Built with pygame and Python
 
 ## Showcase
 -------------
@@ -23,9 +22,9 @@ Guessing Song Game  - Guess the song by its lyrics. Built with pygame and Python
 -------------
 The project is created with:
 * [Python3](https://www.python.org) 
-* [Pygame](https://www.pygame.org/news)
+* [pygame](https://www.pygame.org/news)
 * [lyricsgenius](https://lyricsgenius.readthedocs.io/en/master/)
-* [Pygame_gui](https://pygame-gui.readthedocs.io/en/latest/)
+* [pygame_gui](https://pygame-gui.readthedocs.io/en/latest/)
 
 
 ## Credits
