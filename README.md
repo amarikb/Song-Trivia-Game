@@ -30,7 +30,7 @@ Guessing Song Game  - Guess the song by its lyrics. Built with pygame and Python
 ![](https://github.com/amarikb/Song-Trivia-Game/blob/main/data/readme/losepage.gif)
 
 ### High Score Saved
-![](https://github.com/amarikb/Song-Trivia-Game/blob/main/data/readme/highscore-screen.png)
+![](https://github.com/amarikb/Song-Trivia-Game/blob/main/data/readme/highscore-screen.PNG)
 
 ## Built With
 -------------
