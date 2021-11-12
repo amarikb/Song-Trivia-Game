@@ -1,6 +1,6 @@
 # Song Trivia Game
 
-## Table Of Contents
+## Table of Contents
 -------------
 * [General Info](#general-info)
 * [Showcase](#showcase)
